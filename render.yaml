@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: labelcheck
+    runtime: docker
+    plan: starter
+    healthCheckPath: /api/samples

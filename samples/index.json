@@ -1,0 +1,146 @@
+[
+  {
+    "name": "bourbon_ok",
+    "title": "Bourbon: label matches application (all OK)",
+    "application": {
+      "application_id": "TTB-2026-0001",
+      "brand_name": "OLD TOM DISTILLERY",
+      "class/type": "Kentucky Straight Bourbon Whiskey",
+      "alcohol_pct": 45.0,
+      "net_contents_ml": 750,
+      "bottler_name": "Old Tom Distillery Co.",
+      "bottler_address": "123 Barrel Lane, Frankfort, KY 40601",
+      "is_import": false,
+      "country_of_origin": null
+    },
+    "expected": "match"
+  },
+  {
+    "name": "imperfect_photo",
+    "title": "Bourbon: photo taken at an angle with glare (bonus test)",
+    "application": {
+      "application_id": "TTB-2026-0001",
+      "brand_name": "OLD TOM DISTILLERY",
+      "class/type": "Kentucky Straight Bourbon Whiskey",
+      "alcohol_pct": 45.0,
+      "net_contents_ml": 750,
+      "bottler_name": "Old Tom Distillery Co.",
+      "bottler_address": "123 Barrel Lane, Frankfort, KY 40601",
+      "is_import": false,
+      "country_of_origin": null
+    },
+    "expected": "bonus"
+  },
+  {
+    "name": "bourbon_case",
+    "title": "Bourbon: brand printed in different case (should still pass)",
+    "application": {
+      "application_id": "TTB-2026-0011",
+      "brand_name": "OLD TOM DISTILLERY",
+      "class/type": "Kentucky Straight Bourbon Whiskey",
+      "alcohol_pct": 45.0,
+      "net_contents_ml": 750,
+      "bottler_name": "Old Tom Distillery Co.",
+      "bottler_address": "123 Barrel Lane, Frankfort, KY 40601",
+      "is_import": false,
+      "country_of_origin": null
+    },
+    "expected": "match"
+  },
+  {
+    "name": "bourbon_abv_wrong",
+    "title": "Bourbon: label says 43% but application says 45%",
+    "application": {
+      "application_id": "TTB-2026-0012",
+      "brand_name": "OLD TOM DISTILLERY",
+      "class/type": "Kentucky Straight Bourbon Whiskey",
+      "alcohol_pct": 45.0,
+      "net_contents_ml": 750,
+      "bottler_name": "Old Tom Distillery Co.",
+      "bottler_address": "123 Barrel Lane, Frankfort, KY 40601",
+      "is_import": false,
+      "country_of_origin": null
+    },
+    "expected": "mismatch"
+  },
+  {
+    "name": "bourbon_warning_typo",
+    "title": "Bourbon: one letter off in the warning (needs a human look)",
+    "application": {
+      "application_id": "TTB-2026-0013",
+      "brand_name": "OLD TOM DISTILLERY",
+      "class/type": "Kentucky Straight Bourbon Whiskey",
+      "alcohol_pct": 45.0,
+      "net_contents_ml": 750,
+      "bottler_name": "Old Tom Distillery Co.",
+      "bottler_address": "123 Barrel Lane, Frankfort, KY 40601",
+      "is_import": false,
+      "country_of_origin": null
+    },
+    "expected": "review"
+  },
+  {
+    "name": "bourbon_warning_header",
+    "title": "Bourbon: warning header not in all caps (fails)",
+    "application": {
+      "application_id": "TTB-2026-0015",
+      "brand_name": "OLD TOM DISTILLERY",
+      "class/type": "Kentucky Straight Bourbon Whiskey",
+      "alcohol_pct": 45.0,
+      "net_contents_ml": 750,
+      "bottler_name": "Old Tom Distillery Co.",
+      "bottler_address": "123 Barrel Lane, Frankfort, KY 40601",
+      "is_import": false,
+      "country_of_origin": null
+    },
+    "expected": "mismatch"
+  },
+  {
+    "name": "bourbon_warning_wrong",
+    "title": "Bourbon: warning wording changed (fails)",
+    "application": {
+      "application_id": "TTB-2026-0014",
+      "brand_name": "OLD TOM DISTILLERY",
+      "class/type": "Kentucky Straight Bourbon Whiskey",
+      "alcohol_pct": 45.0,
+      "net_contents_ml": 750,
+      "bottler_name": "Old Tom Distillery Co.",
+      "bottler_address": "123 Barrel Lane, Frankfort, KY 40601",
+      "is_import": false,
+      "country_of_origin": null
+    },
+    "expected": "mismatch"
+  },
+  {
+    "name": "wine_import",
+    "title": "Imported wine: includes country of origin (all OK)",
+    "application": {
+      "application_id": "TTB-2026-0002",
+      "brand_name": "STONE'S THROW",
+      "class/type": "Red Wine",
+      "alcohol_pct": 13.5,
+      "net_contents_ml": 750,
+      "bottler_name": "Vintners Hall Imports",
+      "bottler_address": "500 Harbor Blvd, Newark, NJ 07114",
+      "is_import": true,
+      "country_of_origin": "France"
+    },
+    "expected": "match"
+  },
+  {
+    "name": "wine_net_wrong",
+    "title": "Imported wine: label says 500 mL but application says 750 mL",
+    "application": {
+      "application_id": "TTB-2026-0022",
+      "brand_name": "STONE'S THROW",
+      "class/type": "Red Wine",
+      "alcohol_pct": 13.5,
+      "net_contents_ml": 750,
+      "bottler_name": "Vintners Hall Imports",
+      "bottler_address": "500 Harbor Blvd, Newark, NJ 07114",
+      "is_import": true,
+      "country_of_origin": "France"
+    },
+    "expected": "mismatch"
+  }
+]

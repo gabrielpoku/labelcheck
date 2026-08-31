@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LabelCheck: Alcohol Label Verification (POC)</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%231450a3'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3EL%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>LabelCheck</h1>
+    <p class="tagline">Alcohol label verification &middot; Compliance Division proof of concept</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button id="tab-single" class="tab active" role="tab">Check one label</button>
+    <button id="tab-batch" class="tab" role="tab">Check a batch</button>
+  </nav>
+
+  <!-- single label -->
+  <main id="view-single" class="view">
+    <section class="panel form-panel">
+      <h2>1. Label artwork</h2>
+      <label for="sample-select" class="field-label">Try a built-in sample</label>
+      <select id="sample-select">
+        <option value="">Choose a sample (optional)</option>
+      </select>
+
+      <div id="dropzone" class="dropzone">
+        <img id="preview" alt="Label preview" hidden />
+        <p id="dropzone-hint">Drag &amp; drop the label image here,<br />or</p>
+        <label class="file-btn" for="image-input">Choose image file</label>
+        <input type="file" id="image-input" accept="image/png,image/jpeg,image/webp" hidden />
+        <p class="fine-print">PNG, JPEG, or WebP &middot; up to 10&nbsp;MB</p>
+      </div>
+
+      <h2>2. Application data</h2>
+      <p class="field-label">Enter what the application says the label should contain.</p>
+
+      <div class="grid">
+        <label>Brand name
+          <input id="f-brand_name" type="text" autocomplete="off" />
+        </label>
+        <label>Class / type
+          <input id="f-class_type" type="text" autocomplete="off" placeholder="e.g. Kentucky Straight Bourbon Whiskey" />
+        </label>
+        <label>Alcohol content (% ABV)
+          <input id="f-alcohol_pct" type="number" step="0.1" min="0" max="100" />
+        </label>
+        <label>Net contents (mL)
+          <input id="f-net_contents_ml" type="number" step="1" min="1" />
+        </label>
+        <label class="span2">Bottler / producer name
+          <input id="f-bottler_name" type="text" autocomplete="off" />
+        </label>
+        <label class="span2">Bottler / producer address
+          <input id="f-bottler_address" type="text" autocomplete="off" />
+        </label>
+        <label class="checkbox-row">
+          <input id="f-is_import" type="checkbox" />
+          This is an imported product
+        </label>
+        <label id="country-wrap" hidden>Country of origin
+          <input id="f-country_of_origin" type="text" autocomplete="off" placeholder="e.g. France" />
+        </label>
+      </div>
+
+      <button id="verify-btn" class="primary big">Verify label</button>
+      <p id="single-error" class="error" hidden></p>
+    </section>
+
+    <section class="panel results-panel" id="single-results">
+      <p class="placeholder">Results will appear here.</p>
+    </section>
+  </main>
+
+  <!-- batch -->
+  <main id="view-batch" class="view" hidden>
+    <section class="panel">
+      <h2>Upload a batch</h2>
+      <ol class="steps">
+        <li>
+          <strong>Application data (CSV)</strong>: one row per label.
+          <label class="file-btn inline" for="csv-input">Choose CSV file</label>
+          <input type="file" id="csv-input" accept=".csv" hidden />
+          <span id="csv-name" class="fine-print"></span>
+          <details class="csv-help">
+            <summary>Required columns</summary>
+            <p><code>image_filename, brand_name, class_type, alcohol_pct, net_contents_ml,
+              bottler_name, bottler_address, is_import, country_of_origin, application_id</code></p>
+            <p><code>is_import</code> is true/false; <code>country_of_origin</code> and
+              <code>application_id</code> are optional. A sample CSV is included in the
+              repository (<code>samples/applications.csv</code>).</p>
+          </details>
+        </li>
+        <li>
+          <strong>Label images</strong>: select all the artwork files named in the CSV.
+          <label class="file-btn inline" for="images-input">Choose image files</label>
+          <input type="file" id="images-input" accept="image/png,image/jpeg,image/webp" multiple hidden />
+          <span id="images-name" class="fine-print"></span>
+        </li>
+        <li>
+          <button id="batch-btn" class="primary big">Start batch check</button>
+        </li>
+      </ol>
+      <p id="batch-error" class="error" hidden></p>
+    </section>
+
+    <section class="panel" id="batch-results" hidden>
+      <div class="progress-wrap">
+        <div class="progress-bar"><div id="progress-fill"></div></div>
+        <span id="progress-text">0 / 0</span>
+      </div>
+      <div id="batch-summary" class="batch-summary"></div>
+      <div class="table-wrap">
+        <table id="batch-table">
+          <thead>
+            <tr>
+              <th>Application</th><th>Image</th><th>Result</th><th>Fields needing attention</th><th>Time</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button id="download-btn" class="primary" hidden>Download CSV report</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>Proof of concept &middot; No uploaded data is stored; everything is processed in memory.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+application_id,image_filename,brand_name,class_type,alcohol_pct,net_contents_ml,bottler_name,bottler_address,is_import,country_of_origin
+TTB-2026-0001,bourbon_ok.png,OLD TOM DISTILLERY,Kentucky Straight Bourbon Whiskey,45.0,750,Old Tom Distillery Co.,"123 Barrel Lane, Frankfort, KY 40601",false,
+TTB-2026-0001,imperfect_photo.png,OLD TOM DISTILLERY,Kentucky Straight Bourbon Whiskey,45.0,750,Old Tom Distillery Co.,"123 Barrel Lane, Frankfort, KY 40601",false,
+TTB-2026-0011,bourbon_case.png,OLD TOM DISTILLERY,Kentucky Straight Bourbon Whiskey,45.0,750,Old Tom Distillery Co.,"123 Barrel Lane, Frankfort, KY 40601",false,
+TTB-2026-0012,bourbon_abv_wrong.png,OLD TOM DISTILLERY,Kentucky Straight Bourbon Whiskey,45.0,750,Old Tom Distillery Co.,"123 Barrel Lane, Frankfort, KY 40601",false,
+TTB-2026-0013,bourbon_warning_typo.png,OLD TOM DISTILLERY,Kentucky Straight Bourbon Whiskey,45.0,750,Old Tom Distillery Co.,"123 Barrel Lane, Frankfort, KY 40601",false,
+TTB-2026-0015,bourbon_warning_header.png,OLD TOM DISTILLERY,Kentucky Straight Bourbon Whiskey,45.0,750,Old Tom Distillery Co.,"123 Barrel Lane, Frankfort, KY 40601",false,
+TTB-2026-0014,bourbon_warning_wrong.png,OLD TOM DISTILLERY,Kentucky Straight Bourbon Whiskey,45.0,750,Old Tom Distillery Co.,"123 Barrel Lane, Frankfort, KY 40601",false,
+TTB-2026-0002,wine_import.png,STONE'S THROW,Red Wine,13.5,750,Vintners Hall Imports,"500 Harbor Blvd, Newark, NJ 07114",true,France
+TTB-2026-0022,wine_net_wrong.png,STONE'S THROW,Red Wine,13.5,750,Vintners Hall Imports,"500 Harbor Blvd, Newark, NJ 07114",true,France
