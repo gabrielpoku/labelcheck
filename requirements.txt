@@ -1,7 +1,10 @@
 fastapi>=0.115
 uvicorn[standard]>=0.30
 python-multipart>=0.0.9
-rapidocr-onnxruntime>=1.3
+# Pinned: the warning verifier's merge/misread tolerances are tuned to 1.2.x
+# OCR segmentation; 1.4.x merges whole phrases into single tokens and shifts
+# verdicts. The pin keeps local, Docker, and Render behavior identical.
+rapidocr-onnxruntime==1.2.3
 rapidfuzz>=3.9
 pillow>=10.4
 pydantic>=2.8
