@@ -7,7 +7,8 @@ returns a per-field verdict in a couple of seconds.
 
 Built for the take-home brief at `treasurytakehome-rgb/instructions`.
 
-**Live app:** _(add the deployed URL here)_
+**Live app:** deployed on Render — see [Deployment](#deployment).
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/gabrielpoku/labelcheck)
 
 ## What it checks
 
@@ -146,6 +147,15 @@ cheap to cover.
 Any host that runs a Python container works. A `Dockerfile` and a `render.yaml`
 are included.
 
+**Render (Blueprint):** the repo's `render.yaml` defines the web service
+(Docker runtime, health check on `/api/samples`). Either click the
+*Deploy to Render* button above, or in the Render dashboard choose
+**New + → Blueprint** and select `gabrielpoku/labelcheck`. Render builds the
+Dockerfile and starts the app; `run.py` honors Render's injected `PORT`.
+Deploys auto-trigger on every push to `main`.
+
+Locally:
+
 ```bash
 docker build -t labelcheck .
 docker run -p 8000:8000 labelcheck
@@ -174,5 +184,14 @@ Railway, Fly, Cloud Run or Azure Container Apps work the same way.
    grammars (ALC./VOL., PROOF, "Product of ...") are US English.
 7. **Nothing is stored.** Uploads are processed in memory and never written to
    disk. Batch jobs live in RAM and expire after 30 minutes.
-8. **Sample labels are generated artwork**, not real submissions. They exist to
+8. **OCR is local on purpose.** Cloud document-AI services (LlamaParse, Azure
+   Document Intelligence, AWS Textract) would likely read degraded artwork
+   somewhat better, but they were ruled out deliberately: TTB's network blocks
+   outbound calls to third-party ML endpoints (the reason the previous
+   scanning-vendor pilot failed), the async upload/poll/download round-trip
+   blows the 5-second budget, and shipping label artwork to an external
+   processor is exactly the data-handling question a federal prototype does
+   not want to open. `OCR_BACKEND`-style pluggability would be the natural
+   follow-up if a future environment allows egress.
+9. **Sample labels are generated artwork**, not real submissions. They exist to
    exercise every verdict path deterministically.
