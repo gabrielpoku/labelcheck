@@ -189,8 +189,8 @@ Railway, Fly, Cloud Run or Azure Container Apps work the same way.
 4. **Verdicts, not approvals.** The tool surfaces agreements and discrepancies.
    Final judgment stays with an agent.
 5. **Batch concurrency** is env-tunable (`OCR_CONCURRENCY`, default 2, set to
-   1 on the 512 MB free instance so a batch fits in memory). A large batch
-   takes minutes on the free tier, and progress is visible throughout.
+   1 on the deployed 512 MB instance so a batch fits in memory). A large
+   batch takes minutes there, and progress is visible throughout.
 6. **English labels only.** The OCR model is multilingual but the field
    grammars (ALC./VOL., PROOF, "Product of ...") are US English.
 7. **Nothing is stored.** Uploads are processed in memory and never written to
