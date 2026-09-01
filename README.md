@@ -7,7 +7,7 @@ returns a per-field verdict in a couple of seconds.
 
 Built for the take-home brief at `treasurytakehome-rgb/instructions`.
 
-**Live app:** deployed on Render — see [Deployment](#deployment).
+**Live app:** https://labelcheck-smo8.onrender.com (Render, free tier)
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/gabrielpoku/labelcheck)
 
 ## What it checks
@@ -154,6 +154,18 @@ are included.
 Dockerfile and starts the app; `run.py` honors Render's injected `PORT`.
 Deploys auto-trigger on every push to `main`.
 
+**Free-tier notes** (the deployed instance is Render's 0.5 CPU / 512 MB plan):
+
+- Single-label checks land around 3 seconds — inside the 5-second budget.
+  The OCR thread pools are explicitly sized (`OCR_THREADS`) because both
+  ONNX Runtime and OpenCV default to one thread per *host* core, which
+  thrashes a small cgroup and pushed single checks past 15 seconds.
+- A 9-label batch takes about 45 seconds and runs one row at a time
+  (`OCR_CONCURRENCY=1`) to stay under the memory ceiling. On a larger plan
+  both env vars can be raised for proportionally faster batches.
+- The instance sleeps after ~15 minutes idle; the first visitor after that
+  waits roughly a minute for it to wake. Everything afterwards is fast.
+
 Locally:
 
 ```bash
@@ -177,9 +189,9 @@ Railway, Fly, Cloud Run or Azure Container Apps work the same way.
    are a mismatch. Net contents tolerance is 1%.
 4. **Verdicts, not approvals.** The tool surfaces agreements and discrepancies.
    Final judgment stays with an agent.
-5. **Batch concurrency** is capped at 2 OCR passes in flight so a large batch
-   cannot starve someone checking a single label. A 300-label batch takes
-   minutes, and progress is visible throughout.
+5. **Batch concurrency** is env-tunable (`OCR_CONCURRENCY`, default 2, set to
+   1 on the 512 MB free instance so a batch fits in memory). A large batch
+   takes minutes on the free tier, and progress is visible throughout.
 6. **English labels only.** The OCR model is multilingual but the field
    grammars (ALC./VOL., PROOF, "Product of ...") are US English.
 7. **Nothing is stored.** Uploads are processed in memory and never written to
