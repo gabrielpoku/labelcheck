@@ -7,8 +7,7 @@ returns a per-field verdict in a couple of seconds.
 
 Built for the take-home brief at `treasurytakehome-rgb/instructions`.
 
-**Live app:** https://labelcheck-smo8.onrender.com (Render, free tier)
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/gabrielpoku/labelcheck)
+**Live app:** https://labelcheck-smo8.onrender.com
 
 ## What it checks
 
@@ -148,13 +147,13 @@ Any host that runs a Python container works. A `Dockerfile` and a `render.yaml`
 are included.
 
 **Render (Blueprint):** the repo's `render.yaml` defines the web service
-(Docker runtime, health check on `/api/samples`). Either click the
-*Deploy to Render* button above, or in the Render dashboard choose
-**New + → Blueprint** and select `gabrielpoku/labelcheck`. Render builds the
-Dockerfile and starts the app; `run.py` honors Render's injected `PORT`.
-Deploys auto-trigger on every push to `main`.
+(Docker runtime, health check on `/api/samples`). In the Render dashboard
+choose **New + → Blueprint** and select `gabrielpoku/labelcheck`. Render
+builds the Dockerfile and starts the app; `run.py` honors Render's injected
+`PORT`. Deploys auto-trigger on every push to `main`.
 
-**Free-tier notes** (the deployed instance is Render's 0.5 CPU / 512 MB plan):
+**Performance notes** (the deployed instance is Render's 0.5 CPU / 512 MB
+plan):
 
 - Single-label checks land around 3 seconds — inside the 5-second budget.
   The OCR thread pools are explicitly sized (`OCR_THREADS`) because both
