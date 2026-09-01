@@ -10,6 +10,7 @@ at startup keeps the first real request fast enough for the 5-second budget).
 from __future__ import annotations
 
 import io
+import os
 import threading
 from dataclasses import dataclass
 from pathlib import Path
@@ -19,6 +20,44 @@ from PIL import Image
 
 _MAX_DIM = 1600        # downscale huge artwork; OCR accuracy holds, speed improves
 _MIN_DIM = 700         # upscale tiny photos so small print is legible to OCR
+
+
+def _env_int(name: str, default: int) -> int:
+    try:
+        return max(1, int(os.environ.get(name, "")))
+    except ValueError:
+        return default
+
+
+def _ocr_concurrency() -> int:
+    return _env_int("OCR_CONCURRENCY", 2)
+
+
+def _ocr_threads() -> int:
+    return _env_int("OCR_THREADS", 2)
+
+
+def _cap_onnx_threads(threads: int) -> None:
+    """Clamp ONNX Runtime thread pools to `threads` per session.
+
+    RapidOCR builds its sessions with default SessionOptions, which sizes
+    intra-op pools by the *host's* core count. On a small container (e.g.
+    Render's 512 MB free tier) the host may expose many more cores than the
+    cgroup is allowed to use; the oversized pools waste RAM and thrash the
+    CPU quota. RapidOCR exposes no setting for this, so SessionOptions is
+    wrapped here before any session is constructed.
+    """
+    import onnxruntime as _ort
+
+    original = _ort.SessionOptions
+
+    def capped(*args, **kwargs):
+        opts = original(*args, **kwargs)
+        opts.intra_op_num_threads = threads
+        opts.inter_op_num_threads = 1
+        return opts
+
+    _ort.SessionOptions = capped
 
 
 @dataclass
@@ -37,8 +76,11 @@ class LabelOcr:
     latency is unaffected (onnxruntime releases the GIL during inference).
     """
 
-    def __init__(self, concurrency: int = 2) -> None:
-        self._slots = threading.BoundedSemaphore(concurrency)
+    def __init__(self, concurrency: int | None = None) -> None:
+        self._slots = threading.BoundedSemaphore(
+            concurrency if concurrency is not None else _ocr_concurrency()
+        )
+        _cap_onnx_threads(_ocr_threads())
         from rapidocr_onnxruntime import RapidOCR
 
         self._engine = RapidOCR()

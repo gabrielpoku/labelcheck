@@ -2,5 +2,13 @@ services:
   - type: web
     name: labelcheck
     runtime: docker
-    plan: starter
+    plan: free
     healthCheckPath: /api/samples
+    envVars:
+      # 512 MB-class instances: serialize OCR passes and keep ONNX thread
+      # pools small so a batch cannot exhaust memory (see app/ocr/engine.py).
+      # On a larger plan both can be raised again for faster batches.
+      - key: OCR_CONCURRENCY
+        value: "1"
+      - key: OCR_THREADS
+        value: "2"
