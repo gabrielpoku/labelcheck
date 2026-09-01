@@ -38,15 +38,20 @@ def _ocr_threads() -> int:
 
 
 def _cap_onnx_threads(threads: int) -> None:
-    """Clamp ONNX Runtime thread pools to `threads` per session.
+    """Clamp ONNX Runtime and OpenCV thread pools to `threads`.
 
-    RapidOCR builds its sessions with default SessionOptions, which sizes
-    intra-op pools by the *host's* core count. On a small container (e.g.
-    Render's 512 MB free tier) the host may expose many more cores than the
-    cgroup is allowed to use; the oversized pools waste RAM and thrash the
-    CPU quota. RapidOCR exposes no setting for this, so SessionOptions is
-    wrapped here before any session is constructed.
+    RapidOCR builds its ONNX sessions with default SessionOptions, which sizes
+    intra-op pools by the *host's* core count; OpenCV does the same for its
+    own pools. On a small container (e.g. Render's 512 MB free tier) the host
+    exposes many more cores than the cgroup may use: the oversized pools waste
+    RAM and thrash the CPU quota. Neither library's setting is reachable
+    through RapidOCR's API, so they are capped here before any session is
+    constructed.
     """
+    import cv2
+
+    cv2.setNumThreads(threads)
+
     import onnxruntime as _ort
 
     original = _ort.SessionOptions

@@ -22,6 +22,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.engine.models import ApplicationData, VerificationResult
+from app.ocr.engine import _ocr_concurrency
 from app.service import verify_image
 
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
@@ -114,8 +115,11 @@ class BatchJob:
 _jobs: dict[str, BatchJob] = {}
 _jobs_lock = threading.Lock()
 # Worker pool for OCR work (onnxruntime releases the GIL, so threads scale).
-# Batch runner threads are separate so a busy pool can never deadlock a runner.
-_row_pool = ThreadPoolExecutor(max_workers=4)
+# Sized to the OCR concurrency so at most that many rows are decoded and
+# processed end-to-end at once — on a 512 MB instance every concurrent row
+# holds decoded image buffers and OCR activations, so this directly sets the
+# batch's memory ceiling.
+_row_pool = ThreadPoolExecutor(max_workers=_ocr_concurrency())
 
 
 def _prune_jobs() -> None:
